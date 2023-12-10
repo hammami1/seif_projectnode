@@ -1,0 +1,93 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Informations sur la participation</title>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      input[type="text"] {
+        width: calc(100% - 12px);
+        padding: 8px;
+        margin-bottom: 15px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+
+      input[type="submit"],
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:hover,
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      p {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <label for="date_participation">Date de participation:</label>
+      <input id="date_participation" type="text" /><br />
+      <label for="statut">Statut :</label>
+      <input id="statut" type="text" /><br />
+      <label for="nbr_participants">Nombre de participants :</label>
+      <input id="nbr_participants" type="text" /><br />
+      <input onclick="envoyer()" type="submit" />
+      <button onclick="afficher()">Afficher participant</button>
+
+      <div id="resultat"></div>
+    </div>
+
+    <script>
+      const socket = io.connect();
+
+      socket.on("participant", (data) => {
+         s= document.createElement("p");
+        s.innerHTML =("<center>" +"date_participation" +":" +data.date_participation +"<br>" +"statut" +":" +data.statut +"<br>" +"nbr_participants" +":" +data.nbr_participants +"</center>")
+        document.body.appendChild(s)
+      });
+
+      function envoyer() {
+        participant = {
+          date_participation: date_participation.value,
+          statut: statut.value,
+          nbr_participants: nbr_participants.value,
+        };
+        socket.emit("participant", participant);
+      }
+      function afficher() {}
+    </script>
+  </body>
+</html>
